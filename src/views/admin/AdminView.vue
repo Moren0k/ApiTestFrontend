@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { AdminService } from '@/services/AdminService'
-import type { User } from '@/models/User'
+import { UserRole, type ChangeUserRoleRequest, type User } from '@/models/User'
 
 const users = ref<User[]>([])
 const error = ref('')
@@ -14,7 +14,7 @@ async function loadUsers() {
   }
 }
 
-async function removeUser(id:string) {
+async function removeUser(id: string) {
   try {
     await AdminService.removeUserById(id)
     alert("Eliminado!")
@@ -22,6 +22,17 @@ async function removeUser(id:string) {
     return
   } catch (e) {
     error.value = 'Error eliminando usuario'
+  }
+}
+
+async function setUserRole(id: string, role: ChangeUserRoleRequest) {
+  try {
+    await AdminService.changeUserRole(id, role)
+    alert("Actualizado")
+    loadUsers();
+    return
+  } catch (e) {
+    error.value = ("Error cambiando rol de usuario")
   }
 }
 
@@ -58,6 +69,7 @@ onMounted(() => {
             <th>Email</th>
             <th>Rol</th>
             <th>Remove</th>
+            <th>ChangeRole</th>
           </tr>
         </thead>
         <tbody>
@@ -67,13 +79,25 @@ onMounted(() => {
             <td>{{ user.email }}</td>
             <td>
               <span>
-                {{ user.role == '0' ? 'User' : 'Admin' }}
+                {{ user.role }}
               </span>
             </td>
             <td>
               <button @click="removeUser(user.id)">
                 Eliminar
               </button>
+            </td>
+            <td>
+              <div v-if="user.role == 'User'">
+                <button @click="setUserRole(user.id, { role: UserRole.Admin })">
+                  Cambiar a Admin
+                </button>
+              </div>
+              <div v-else="user.role == 'Admin'">
+                <button @click="setUserRole(user.id, { role: UserRole.User })">
+                Cambiar a User
+              </button>
+              </div>
             </td>
           </tr>
         </tbody>

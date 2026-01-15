@@ -4,3 +4,12 @@ export interface User {
     email: string,
     role: string
 }
+
+export enum UserRole {
+  User = 0,
+  Admin = 1
+}
+
+export interface ChangeUserRoleRequest {
+  role: UserRole
+}
