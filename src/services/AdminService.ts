@@ -7,4 +7,10 @@ export class AdminService{
 
         return response.data
     }
+
+    static async removeUserById(id: string){
+        const response = await api.delete(`/users/${id}`)
+
+        return response.data
+    }
 }

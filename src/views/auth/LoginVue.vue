@@ -37,78 +37,36 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div style="
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    min-height: 80vh; 
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f9f9f9;
-  ">
-    <div style="
-      background: white; 
-      padding: 40px; 
-      border-radius: 12px; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-      width: 100%; 
-      max-width: 400px;
-      text-align: center;
-    ">
-      <h1 style="color: #1a1a1a; margin-bottom: 10px; font-size: 2rem;">Bienvenido</h1>
-      <p style="color: #666; margin-bottom: 30px;">Ingresa tus credenciales para continuar</p>
+  <div>
+    <div>
+      <h1>Bienvenido</h1>
+      <p>Ingresa tus credenciales para continuar</p>
 
-      <div style="margin-bottom: 20px; text-align: left;">
-        <label style="display: block; margin-bottom: 8px; color: #1a1a1a; font-weight: 600; font-size: 0.9rem;">Email</label>
-        <input 
-          v-model="email" 
+      <div>
+        <label>Email</label>
+        <input
+          v-model="email"
           type="email"
-          placeholder="correo@ejemplo.com" 
-          style="
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.3s;
-          "
+          placeholder="correo@ejemplo.com"
         />
       </div>
 
-      <div style="margin-bottom: 30px; text-align: left;">
-        <label style="display: block; margin-bottom: 8px; color: #1a1a1a; font-weight: 600; font-size: 0.9rem;">Contraseña</label>
-        <input 
-          v-model="password" 
+      <div>
+        <label>Contraseña</label>
+        <input
+          v-model="password"
           type="password"
-          placeholder="••••••••" 
-          style="
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 1px solid #ddd; 
-            border-radius: 6px; 
-            box-sizing: border-box;
-            outline: none;
-          "
+          placeholder="••••••••"
         />
       </div>
 
-      <button @click="handleLogin" style="
-        width: 100%; 
-        background-color: #42b883; 
-        color: white; 
-        padding: 14px; 
-        border: none; 
-        border-radius: 6px; 
-        font-weight: bold; 
-        font-size: 1rem; 
-        cursor: pointer; 
-        transition: background 0.2s;
-      ">
+      <button @click="handleLogin">
         Iniciar Sesión
       </button>
 
-      <p style="margin-top: 20px; font-size: 0.85rem; color: #888;">
-        ¿No tienes cuenta? <a href="/register" style="color: #1a1a1a; font-weight: bold; text-decoration: none;">Registrarse</a>
+      <p>
+        ¿No tienes cuenta?
+        <router-link to="/register">Registrarse</router-link>
       </p>
     </div>
   </div>
