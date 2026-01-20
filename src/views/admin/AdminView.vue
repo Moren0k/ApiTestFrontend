@@ -2,15 +2,50 @@
 import { ref, onMounted } from 'vue'
 import { AdminService } from '@/services/AdminService'
 import { UserRole, type ChangeUserRoleRequest, type User } from '@/models/User'
+import { Image } from '@/models/Image'
+import UserServices from '@/services/UserService'
 
 const users = ref<User[]>([])
+const images = ref<Image[]>([])
 const error = ref('')
+const selectedFile = ref<File | null>(null)
 
 async function loadUsers() {
   try {
     users.value = await AdminService.getAllUsers()
   } catch (e) {
     error.value = 'Error cargando usuarios'
+  }
+}
+
+async function loadImages() {
+  try {
+    images.value = await UserServices.getAllImages();
+  } catch (error) {
+    error.value = "Error cargando imagenes"
+  }
+}
+
+function onFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files.length > 0) {
+    selectedFile.value = input.files[0]
+  }
+}
+
+async function uploadImg() {
+  if (!selectedFile.value) {
+    alert('Selecciona una imagen')
+    return
+  }
+
+  try {
+    await AdminService.uploadImage(selectedFile.value)
+    selectedFile.value = null
+    await loadImages()
+    alert('Imagen cargada')
+  } catch {
+    error.value = 'Error subiendo imagen'
   }
 }
 
@@ -37,17 +72,16 @@ async function setUserRole(id: string, role: ChangeUserRoleRequest) {
 }
 
 onMounted(() => {
-
   const userRole = localStorage.getItem('user_role')
 
   if (userRole !== 'Admin') {
     error.value = 'No autorizado, solo para Admin'
     return
-  } else {
-    loadUsers()
   }
-})
 
+  loadUsers()
+  loadImages()
+})
 </script>
 
 <template>
@@ -95,8 +129,8 @@ onMounted(() => {
               </div>
               <div v-else="user.role == 'Admin'">
                 <button @click="setUserRole(user.id, { role: UserRole.User })">
-                Cambiar a User
-              </button>
+                  Cambiar a User
+                </button>
               </div>
             </td>
           </tr>
@@ -107,5 +141,25 @@ onMounted(() => {
     <div v-else-if="!error">
       <p>No se encontraron usuarios o la lista está vacía.</p>
     </div>
+  </div>
+
+
+  <hr />
+
+  <div>
+    <h2>Manejo de Imágenes</h2>
+
+    <input type="file" @change="onFileSelected" />
+    <button @click="uploadImg">Subir Imagen</button>
+
+    <div v-if="images.length">
+      <div v-for="image in images" :key="image.url">
+        <img :src="image.publicId" alt="Imagen" style="max-width: 250px; margin: 10px" />
+        <a :href="image.publicId">{{ image.publicId }}</a>
+        <p>{{ image.url }}</p>
+      </div>
+    </div>
+
+    <p v-else>No hay imágenes cargadas</p>
   </div>
 </template>

@@ -3,7 +3,7 @@ import type { ChangeUserRoleRequest } from "@/models/User";
 
 export class AdminService {
   static async getAllUsers() {
-    const response = await api.get("/users");
+    const response = await api.get(`/users`);
 
     return response.data;
   }
@@ -15,8 +15,15 @@ export class AdminService {
   }
 
   static async changeUserRole(userId: string, request: ChangeUserRoleRequest) {
-  const response = await api.patch(`/users/${userId}/role`, request)
+    const response = await api.patch(`/users/${userId}/role`, request);
 
-  return response.data;
-}
+    return response.data;
+  }
+
+  static async uploadImage(file: File)
+  {
+    const response = await api.patch(`/images/upload`, file);
+
+    return response.data;
+  }
 }
