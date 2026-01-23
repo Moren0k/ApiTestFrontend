@@ -22,7 +22,7 @@ export class AdminService {
 
   static async uploadImage(file: File)
   {
-    const response = await api.patch(`/images/upload`, file);
+    const response = await api.post(`/images/upload`, file);
 
     return response.data;
   }
